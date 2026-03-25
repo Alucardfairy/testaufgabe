@@ -41,10 +41,10 @@ class GameController extends Controller
      */
     protected function someoneHasWon( GameBoard $game ): bool {
         
-        for ($i=0;$i<=$game::TTT_SIZE-1;$i++){
-            $won = true;
-            for($j=1;$j<=$game::TTT_SIZE-1;$j++){
-                if($game->getRow($i)->getSpace( 0 ) !== $game->getRow($i)->getSpace( $j )){
+        for ($i=0;$i<=$game::TTT_SIZE-1;$i++) {
+            $won = $game->getRow($i)->getSpace(0) !== GameMark::None;
+            for ($j=1;$j<=$game::TTT_SIZE-1;$j++) {
+                if ($game->getRow($i)->getSpace(0) !== $game->getRow($i)->getSpace($j)) {
                     $won=false;
                     break;
                 }
@@ -52,9 +52,9 @@ class GameController extends Controller
             if ($won)
                 return $won;
 
-            $won = true;
-            for($j=1;$j<=$game::TTT_SIZE-1;$j++){
-                if($game->getColumn($i)->getSpace( 0 ) !== $game->getColumn($i)->getSpace( $j )){
+            $won = $game->getColumn($i)->getSpace(0) !== GameMark::None;
+            for ($j=1;$j<=$game::TTT_SIZE-1;$j++) {
+                if ($game->getColumn($i)->getSpace(0) !== $game->getColumn($i)->getSpace($j)) {
                     $won=false;
                     break;
                 }
@@ -62,21 +62,26 @@ class GameController extends Controller
             if ($won)
                 return $won;
         }
-        if (    // Check the main diagonal
-            $game->getMainDiagonal(0)->getSpace( 0 ) === $game->getMainDiagonal(0)->getSpace( 1 ) &&
-            $game->getMainDiagonal(0)->getSpace( 0 ) === $game->getMainDiagonal(0)->getSpace( 2 ) &&
-            $game->getMainDiagonal(0)->getSpace( 0 ) === $game->getMainDiagonal(0)->getSpace( 3 ) &&
-            $game->getMainDiagonal(0)->getSpace( 0 ) !== GameMark::None
-        ) return true;
 
-        if (    // Check the anti-diagonal
-            $game->getAntiDiagonal(0)->getSpace( 0 ) === $game->getAntiDiagonal(0)->getSpace( 1 ) &&
-            $game->getAntiDiagonal(0)->getSpace( 0 ) === $game->getAntiDiagonal(0)->getSpace( 2 ) &&
-            $game->getAntiDiagonal(0)->getSpace( 0 ) === $game->getAntiDiagonal(0)->getSpace( 3 ) &&
-            $game->getAntiDiagonal(0)->getSpace( 0 ) !== GameMark::None
-        ) return true;
+        $won = $game->getMainDiagonal(0)->getSpace(0) !== GameMark::None;
+        for ($j=1;$j<=$game::TTT_SIZE-1;$j++) {
+            if ($game->getMainDiagonal(0)->getSpace(0) !== $game->getMainDiagonal(0)->getSpace($j)) {
+                $won=false;
+                break;
+            }
+        }
 
-        return false;
+        if ($won)
+            return $won;
+
+        $won = $game->getAntiDiagonal(0)->getSpace(0) !== GameMark::None;
+        for ($j=1;$j<=$game::TTT_SIZE-1;$j++) {
+            if ($game->getAntiDiagonal(0)->getSpace(0) !== $game->getAntiDiagonal(0)->getSpace($j)) {
+                $won=false;
+                break;
+            }
+        }
+        return $won;
     }
 
     protected function whoHasWon( GameBoard $game ): ?GamePlayer {
