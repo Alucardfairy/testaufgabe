@@ -40,30 +40,39 @@ class GameController extends Controller
      * @throws Exception
      */
     protected function someoneHasWon( GameBoard $game ): bool {
+        
+        for ($i=0;$i<=$game::TTT_SIZE-1;$i++){
+            $won = true;
+            for($j=1;$j<=$game::TTT_SIZE-1;$j++){
+                if($game->getRow($i)->getSpace( 0 ) !== $game->getRow($i)->getSpace( $j )){
+                    $won=false;
+                    break;
+                }
+            }
+            if ($won)
+                return $won;
 
-        for ($i=0;$i<=2;$i++){
-            if (    // Check the first row
-                $game->getRow($i)->getSpace( 0 ) === $game->getRow($i)->getSpace( 1 ) &&
-                $game->getRow($i)->getSpace( 0 ) === $game->getRow($i)->getSpace( 2 ) &&
-                $game->getRow($i)->getSpace( 0 ) !== GameMark::None
-            ) 
-                return true;
-            elseif (    // Check the first column
-                $game->getColumn($i)->getSpace( 0 ) === $game->getColumn($i)->getSpace( 1 ) &&
-                $game->getColumn($i)->getSpace( 0 ) === $game->getColumn($i)->getSpace( 2 ) &&
-                $game->getColumn($i)->getSpace( 0 ) !== GameMark::None
-            ) 
-                return true;
+            $won = true;
+            for($j=1;$j<=$game::TTT_SIZE-1;$j++){
+                if($game->getColumn($i)->getSpace( 0 ) !== $game->getColumn($i)->getSpace( $j )){
+                    $won=false;
+                    break;
+                }
+            }
+            if ($won)
+                return $won;
         }
         if (    // Check the main diagonal
             $game->getMainDiagonal(0)->getSpace( 0 ) === $game->getMainDiagonal(0)->getSpace( 1 ) &&
             $game->getMainDiagonal(0)->getSpace( 0 ) === $game->getMainDiagonal(0)->getSpace( 2 ) &&
+            $game->getMainDiagonal(0)->getSpace( 0 ) === $game->getMainDiagonal(0)->getSpace( 3 ) &&
             $game->getMainDiagonal(0)->getSpace( 0 ) !== GameMark::None
         ) return true;
 
         if (    // Check the anti-diagonal
             $game->getAntiDiagonal(0)->getSpace( 0 ) === $game->getAntiDiagonal(0)->getSpace( 1 ) &&
             $game->getAntiDiagonal(0)->getSpace( 0 ) === $game->getAntiDiagonal(0)->getSpace( 2 ) &&
+            $game->getAntiDiagonal(0)->getSpace( 0 ) === $game->getAntiDiagonal(0)->getSpace( 3 ) &&
             $game->getAntiDiagonal(0)->getSpace( 0 ) !== GameMark::None
         ) return true;
 
@@ -105,7 +114,7 @@ class GameController extends Controller
 
         // Check if the given position is actually valid; can't have the player draw a cross on the table next to the
         // game board ;)
-        if ($x < 0 || $x > 2 || $y < 0 || $y > 2)
+        if ($x < 0 || $x > $game::TTT_SIZE-1 || $y < 0 || $y > $game::TTT_SIZE-1)
             return response("Position outside of the game board")->setStatusCode(422)->header('Content-Type', 'text/plain');
 
         // Prevent the player from playing if the game has already ended

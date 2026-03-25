@@ -12,7 +12,7 @@ use Throwable;
 class GameBoard
 {
     // Board size
-    public const TTT_SIZE = 3;
+    public const TTT_SIZE = 4;
 
     // File name for serialization
     public const TTT_GAME = 'tic-tac-toe';
