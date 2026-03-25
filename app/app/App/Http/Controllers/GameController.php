@@ -120,19 +120,10 @@ class GameController extends Controller
      */
     protected function isAllowedToPlay( GameBoard $game, GamePlayer $player) : bool {
 
-        // ##### TASK 6 - No cheating! #################################################################################
-        // =============================================================================================================
-        // We don't want the player to be able to cheat. They should only be able to make a move if it is their turn.
-        // Neither the player nor the bot are allowed to make a move twice in a row. So, you need to check which player
-        // made the *last* move to find out if the player is allowed to act.
-        // =============================================================================================================
-
-        // The method $game->getLastPlayer() will return either GamePlayer::Robot (the last move was made by the bot),
-        // GamePlayer::Human (the last move was made by the player) or GamePlayer::None (this is the first move).
-        // Inside of $player you have the player which wants to play now.
-        // If he is allowed to play, you have to return true, otherwise you have to return false.
-
-        return true;
+        if($game->getLastPlayer()===$player)
+            return false;
+        else 
+            return true;
     }
 
     /**
