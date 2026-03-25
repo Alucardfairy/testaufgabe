@@ -40,52 +40,21 @@ class GameController extends Controller
      * @throws Exception
      */
     protected function someoneHasWon( GameBoard $game ): bool {
-        // ##### TASK 8 - Make this check more efficient ###############################################################
-        // =============================================================================================================
-        // This function checks if the game has already won. It does this by checking for every possible winning
-        // condition. For example, the first block below checks if the first row contains identical marks that are not
-        // GameMark::None.
-        // As you can see, this function is exorbitantly long and highly redundant. Your task is to find a way to
-        // shorten this function without compromising its functionality. Note that by "shorten", we don't mean to just
-        // remove spaces and line breaks ;)
-        // =============================================================================================================
 
-        if (    // Check the first row
-            $game->getRow(0)->getSpace( 0 ) === $game->getRow(0)->getSpace( 1 ) &&
-            $game->getRow(0)->getSpace( 0 ) === $game->getRow(0)->getSpace( 2 ) &&
-            $game->getRow(0)->getSpace( 0 ) !== GameMark::None
-        ) return true;
-
-        if (    // Check the second row
-            $game->getRow(1)->getSpace( 0 ) === $game->getRow(1)->getSpace( 1 ) &&
-            $game->getRow(1)->getSpace( 0 ) === $game->getRow(1)->getSpace( 2 ) &&
-            $game->getRow(1)->getSpace( 0 ) !== GameMark::None
-        ) return true;
-
-        if (    // Check the third row
-            $game->getRow(2)->getSpace( 0 ) === $game->getRow(2)->getSpace( 1 ) &&
-            $game->getRow(2)->getSpace( 0 ) === $game->getRow(2)->getSpace( 2 ) &&
-            $game->getRow(2)->getSpace( 0 ) !== GameMark::None
-        ) return true;
-
-        if (    // Check the first column
-            $game->getColumn(0)->getSpace( 0 ) === $game->getColumn(0)->getSpace( 1 ) &&
-            $game->getColumn(0)->getSpace( 0 ) === $game->getColumn(0)->getSpace( 2 ) &&
-            $game->getColumn(0)->getSpace( 0 ) !== GameMark::None
-        ) return true;
-
-        if (    // Check the second column
-            $game->getColumn(1)->getSpace( 0 ) === $game->getColumn(1)->getSpace( 1 ) &&
-            $game->getColumn(1)->getSpace( 0 ) === $game->getColumn(1)->getSpace( 2 ) &&
-            $game->getColumn(1)->getSpace( 0 ) !== GameMark::None
-        ) return true;
-
-        if (    // Check the third column
-            $game->getColumn(2)->getSpace( 0 ) === $game->getColumn(2)->getSpace( 1 ) &&
-            $game->getColumn(2)->getSpace( 0 ) === $game->getColumn(2)->getSpace( 2 ) &&
-            $game->getColumn(2)->getSpace( 0 ) !== GameMark::None
-        ) return true;
-
+        for ($i=0;$i<=2;$i++){
+            if (    // Check the first row
+                $game->getRow($i)->getSpace( 0 ) === $game->getRow($i)->getSpace( 1 ) &&
+                $game->getRow($i)->getSpace( 0 ) === $game->getRow($i)->getSpace( 2 ) &&
+                $game->getRow($i)->getSpace( 0 ) !== GameMark::None
+            ) 
+                return true;
+            elseif (    // Check the first column
+                $game->getColumn($i)->getSpace( 0 ) === $game->getColumn($i)->getSpace( 1 ) &&
+                $game->getColumn($i)->getSpace( 0 ) === $game->getColumn($i)->getSpace( 2 ) &&
+                $game->getColumn($i)->getSpace( 0 ) !== GameMark::None
+            ) 
+                return true;
+        }
         if (    // Check the main diagonal
             $game->getMainDiagonal(0)->getSpace( 0 ) === $game->getMainDiagonal(0)->getSpace( 1 ) &&
             $game->getMainDiagonal(0)->getSpace( 0 ) === $game->getMainDiagonal(0)->getSpace( 2 ) &&
